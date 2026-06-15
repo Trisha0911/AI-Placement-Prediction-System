@@ -1,100 +1,210 @@
+```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Placement Predictor</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Placement Predictor</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <style>
+
+        body{
+            background:#f4f7fc;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        .hero{
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            color:white;
+            padding:50px;
+            border-radius:20px;
+            text-align:center;
+            margin-bottom:30px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .hero h1{
+            font-weight:bold;
+        }
+
+        .main-card{
+            border:none;
+            border-radius:20px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .form-control{
+            border-radius:12px;
+            padding:12px;
+        }
+
+        .btn-predict{
+            border-radius:12px;
+            padding:12px;
+            font-size:18px;
+            font-weight:600;
+        }
+
+        .result-card{
+            border-radius:15px;
+            border:none;
+        }
+
+        .skill-card{
+            border-radius:15px;
+            border:none;
+        }
+
+        .progress{
+            height:28px;
+            border-radius:20px;
+        }
+
+        .navbar{
+            box-shadow:0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .info-icon{
+            color:#6f42c1;
+            margin-right:5px;
+        }
+
+    </style>
+
 </head>
 
-<body class="bg-light">
+<body>
 
-<div class="container mt-5">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-    <div class="text-end mb-3">
-        <a href="/logout" class="btn btn-danger">
-            Logout
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" href="#">
+            <i class="bi bi-robot"></i>
+            AI Placement Predictor
         </a>
+
+        <div>
+            <a href="/dashboard"
+               class="btn btn-success me-2">
+                <i class="bi bi-bar-chart-fill"></i>
+                Dashboard
+            </a>
+
+            <a href="/logout"
+               class="btn btn-danger">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+            </a>
+        </div>
+
     </div>
 
-    <div class="card shadow-lg p-4">
+</nav>
 
-        <h1 class="text-center text-primary mb-4">
-            Student Placement Prediction System
+<div class="container mt-4">
+
+    <div class="hero">
+
+        <h1>
+            <i class="bi bi-cpu-fill"></i>
+            AI-Powered Placement Prediction
         </h1>
+
+        <p class="mt-3">
+            Predict placement chances and discover improvement areas using Machine Learning.
+        </p>
+
+    </div>
+
+    <div class="card main-card p-4">
 
         <form action="/predict" method="POST">
 
             <div class="row">
 
                 <div class="col-md-12 mb-3">
+                    <label>
+                        <i class="bi bi-person-fill info-icon"></i>
+                        Student Name
+                    </label>
                     <input class="form-control"
                            type="text"
                            name="name"
-                           placeholder="Student Name"
                            required>
                 </div>
 
                 <div class="col-md-6 mb-3">
+                    <label><i class="bi bi-mortarboard-fill info-icon"></i>CGPA</label>
                     <input class="form-control"
                            type="number"
                            step="0.1"
                            name="cgpa"
-                           placeholder="CGPA"
                            required>
                 </div>
 
                 <div class="col-md-6 mb-3">
+                    <label><i class="bi bi-lightbulb-fill info-icon"></i>Aptitude</label>
                     <input class="form-control"
                            type="number"
                            name="aptitude"
-                           placeholder="Aptitude Score"
                            required>
                 </div>
 
                 <div class="col-md-6 mb-3">
+                    <label><i class="bi bi-chat-dots-fill info-icon"></i>Communication</label>
                     <input class="form-control"
                            type="number"
                            name="communication"
-                           placeholder="Communication Score"
                            required>
                 </div>
 
                 <div class="col-md-6 mb-3">
+                    <label><i class="bi bi-folder-fill info-icon"></i>Projects</label>
                     <input class="form-control"
                            type="number"
                            name="projects"
-                           placeholder="Projects"
                            required>
                 </div>
 
                 <div class="col-md-6 mb-3">
+                    <label><i class="bi bi-briefcase-fill info-icon"></i>Internships</label>
                     <input class="form-control"
                            type="number"
                            name="internships"
-                           placeholder="Internships"
                            required>
                 </div>
 
                 <div class="col-md-6 mb-3">
+                    <label><i class="bi bi-award-fill info-icon"></i>Certifications</label>
                     <input class="form-control"
                            type="number"
                            name="certifications"
-                           placeholder="Certifications"
                            required>
                 </div>
 
                 <div class="col-md-12 mb-3">
+                    <label><i class="bi bi-code-slash info-icon"></i>DSA Score</label>
                     <input class="form-control"
                            type="number"
                            name="dsa"
-                           placeholder="DSA Score"
                            required>
                 </div>
 
             </div>
 
-            <button class="btn btn-primary w-100">
+            <button class="btn btn-primary btn-predict w-100">
+                <i class="bi bi-graph-up-arrow"></i>
                 Predict Placement
             </button>
 
@@ -102,43 +212,66 @@
 
         {% if prediction %}
 
-        <div class="alert alert-success mt-4">
-            <h3>{{ prediction }}</h3>
+        <div class="card result-card bg-success text-white mt-4 p-4">
 
-            <h4>
-                Placement Probability:
-                {{ probability }}%
-            </h4>
+            <h3>
+                <i class="bi bi-check-circle-fill"></i>
+                {{ prediction }}
+            </h3>
+
+            <h5 class="mt-3">
+                Placement Probability
+            </h5>
+
+            <div class="progress">
+
+                <div class="progress-bar bg-dark"
+                     style="width: {{ probability }}%;">
+
+                    {{ probability }}%
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="card mt-3 p-3">
+        <div class="card skill-card mt-4 p-4">
 
-            <h4>Skill Improvement Suggestions</h4>
+            <h4>
+                <i class="bi bi-stars"></i>
+                Skill Improvement Suggestions
+            </h4>
 
             {% if skills %}
-            <ul>
+
+            <ul class="mt-3">
+
                 {% for skill in skills %}
                 <li>{{ skill }}</li>
                 {% endfor %}
+
             </ul>
+
             {% else %}
-            <p class="text-success">
+
+            <div class="alert alert-success mt-3">
                 Excellent Profile! Keep Improving.
-            </p>
+            </div>
+
             {% endif %}
 
         </div>
 
         <a href="/download_pdf"
            class="btn btn-danger mt-3 w-100">
-           Download PDF Report
-        </a>
-        {% endif %}
 
-        <a href="/dashboard"
-           class="btn btn-success mt-3">
-            View Dashboard
+            <i class="bi bi-file-earmark-pdf-fill"></i>
+            Download PDF Report
+
         </a>
+
+        {% endif %}
 
     </div>
 
@@ -146,3 +279,4 @@
 
 </body>
 </html>
+```
