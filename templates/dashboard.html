@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Placement Analytics Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <h1 class="text-center mb-4">
+        Placement Analytics Dashboard
+    </h1>
+
+    <!-- Statistics Cards -->
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <h5>Total Students</h5>
+                    <h2>{{ students|length }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <h5>High Chances</h5>
+                    <h2>{{ high }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <h5>Average Probability</h5>
+                    <h2>{{ avg_probability }}%</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Placement Chart -->
+
+    <div class="card mt-4 p-4 shadow">
+        <h4 class="text-center mb-3">
+            Placement Distribution
+        </h4>
+
+        <canvas id="placementChart"></canvas>
+    </div>
+
+    <!-- Accuracy Chart -->
+
+    <div class="card mt-4 p-4 shadow">
+        <h4 class="text-center mb-3">
+            Model Accuracy Comparison
+        </h4>
+
+        <canvas id="accuracyChart"></canvas>
+    </div>
+
+    <!-- Records Section -->
+
+    <div class="card mt-4 shadow">
+
+        <div class="card-header">
+            Student Records
+        </div>
+
+        <div class="card-body">
+
+            <!-- Search -->
+
+            <form method="GET"
+                  action="/dashboard"
+                  class="mb-3">
+
+                <input type="text"
+                       name="search"
+                       class="form-control"
+                       placeholder="Search Student Name">
+            </form>
+
+            <!-- Export Button -->
+
+            <a href="/export"
+               class="btn btn-success mb-3">
+               Export Excel
+            </a>
+
+            <table class="table table-bordered table-striped">
+
+                <thead class="table-dark">
+
+                    <tr>
+                        <th>Rank</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>CGPA</th>
+                        <th>Probability</th>
+                        <th>Result</th>
+                        <th>View</th>
+                        <th>Delete</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for student in students %}
+
+                <tr>
+
+                    <td>
+                        {{ loop.index }}
+                    </td>
+
+                    <td>
+                        {{ student[0] }}
+                    </td>
+
+                    <td>
+                        {{ student[1] }}
+                    </td>
+
+                    <td>
+                        {{ student[2] }}
+                    </td>
+
+                    <td>
+                        {{ student[9] }}%
+                    </td>
+
+                    <td>
+                        {{ student[10] }}
+                    </td>
+
+                    <td>
+                        <a href="/student/{{ student[0] }}"
+                        class="btn btn-info btn-sm">
+                        View
+                    </a>
+                </td>
+                <td>
+                    <a href="/delete/{{ student[0] }}"
+                       class="btn btn-danger btn-sm">
+                       Delete
+                    </a>
+                </td>
+
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <a href="/"
+       class="btn btn-primary mt-3">
+       Back
+    </a>
+
+</div>
+
+<!-- Placement Pie Chart -->
+
+<script>
+
+const placementCtx =
+document.getElementById('placementChart');
+
+new Chart(placementCtx, {
+
+    type: 'pie',
+
+    data: {
+
+        labels: [
+            'High Chance',
+            'Low Chance'
+        ],
+
+        datasets: [{
+
+            label: 'Placement Distribution',
+
+            data: [
+                {{ high }},
+                {{ low }}
+            ]
+
+        }]
+    }
+});
+
+</script>
+
+<!-- Accuracy Bar Chart -->
+
+<script>
+
+const accuracyCtx =
+document.getElementById('accuracyChart');
+
+new Chart(accuracyCtx, {
+
+    type: 'bar',
+
+    data: {
+
+        labels: [
+            'Logistic Regression',
+            'Random Forest'
+        ],
+
+        datasets: [{
+
+            label: 'Accuracy (%)',
+
+            data: [
+                {{ lr_accuracy }},
+                {{ rf_accuracy }}
+            ]
+
+        }]
+    }
+});
+
+</script>
+
+</body>
+</html>
