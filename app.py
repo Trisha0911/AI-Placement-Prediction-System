@@ -5,6 +5,7 @@ from datetime import datetime
 from flask import Flask, render_template, request, redirect, session
 import joblib
 import sqlite3
+import pandas as pd
 
 app = Flask(__name__)
 app.secret_key = "placement_secret_key"
@@ -257,8 +258,6 @@ def delete(id):
 @app.route("/export")
 def export():
 
-    import pandas as pd
-
     conn = sqlite3.connect("students.db")
 
     df = pd.read_sql_query(
@@ -266,14 +265,16 @@ def export():
         conn
     )
 
-    df.to_excel(
-        "students.xlsx",
-        index=False
-    )
-
     conn.close()
 
-    return "students.xlsx created successfully!"
+    file_name = "students.xlsx"
+
+    df.to_excel(file_name, index=False)
+
+    return send_file(
+        file_name,
+        as_attachment=True
+    )
 
 @app.route("/download_pdf")
 def download_pdf():
